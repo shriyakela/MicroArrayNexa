@@ -1,0 +1,11 @@
+ggplot(data, aes(x = Zscore)) +
+  
+  geom_density(fill = "skyblue", alpha = 0.5) +
+  
+  labs(
+    title = "Density of Spot Intensities",
+    x = "Z-score Intensity",
+    y = "Density"
+  ) +
+  
+  theme_bw()

@@ -1,0 +1,60 @@
+# ==============================
+# Heatmap of Spot Intensities
+# ==============================
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+# Set working directory
+setwd("E:/Sem 7/Major Project")
+
+# Read CSV
+data <- read_csv("spot_intensity_output.csv")
+
+# Check structure
+str(data)
+
+# Create same regions as boxplots
+spots_per_region <- 20
+
+data <- data %>%
+  mutate(
+    Region = paste0("Region_", ceiling(Spot_ID / spots_per_region))
+  )
+
+# Z-score normalization
+data <- data %>%
+  mutate(
+    Zscore = (Mean_Intensity - mean(Mean_Intensity)) /
+             sd(Mean_Intensity)
+  )
+
+# Convert region to factor
+data$Region <- factor(data$Region)
+
+# Heatmap
+p <- ggplot(data, aes(x = Spot_ID, y = Region, fill = Zscore)) +
+  
+  geom_tile(color = "white") +
+  
+  scale_fill_gradient2(
+    low = "blue",
+    mid = "white",
+    high = "red",
+    midpoint = 0
+  ) +
+  
+  labs(
+    title = "Heatmap of Microarray Spot Intensities",
+    x = "Spot ID",
+    y = "Region",
+    fill = "Z-score"
+  ) +
+  
+  theme_bw() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+print(p)

@@ -1,0 +1,23 @@
+region_summary <- data %>%
+  group_by(Region) %>%
+  summarise(
+    Mean_Intensity = mean(Zscore),
+    SD = sd(Zscore)
+  )
+
+ggplot(region_summary, aes(x = Region, y = Mean_Intensity, fill = Region)) +
+  
+  geom_bar(stat = "identity") +
+  
+  geom_errorbar(
+    aes(ymin = Mean_Intensity - SD, ymax = Mean_Intensity + SD),
+    width = 0.2
+  ) +
+  
+  theme_bw() +
+  
+  labs(
+    title = "Region-wise Mean Intensity",
+    x = "Region",
+    y = "Mean Z-score"
+  )

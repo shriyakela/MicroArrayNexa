@@ -1,0 +1,60 @@
+# ==============================
+# Protein Microarray Region-wise Violin Plots
+# (Same groups as boxplots)
+# ==============================
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+# --- Set working directory ---
+setwd("E:/Sem 7/Major Project")
+
+# --- Read CSV ---
+data <- read_csv("spot_intensity_output.csv")
+
+# --- Create same regions as boxplot ---
+spots_per_region <- 20
+
+data <- data %>%
+  mutate(
+    Region = paste0("Region_", ceiling(Spot_ID / spots_per_region))
+  )
+
+# --- Z-score normalization ---
+data <- data %>%
+  mutate(
+    Zscore = (Mean_Intensity - mean(Mean_Intensity, na.rm = TRUE)) /
+             sd(Mean_Intensity, na.rm = TRUE)
+  )
+
+# --- Convert Region to factor ---
+data$Region <- factor(data$Region,
+                      levels = unique(data$Region))
+
+# --- Violin Plot ---
+ggplot(data, aes(x = Region, y = Zscore, fill = Region)) +
+
+  geom_violin(trim = FALSE, alpha = 0.8) +
+
+  geom_boxplot(width = 0.15,
+               color = "black",
+               outlier.shape = NA) +
+
+  geom_jitter(width = 0.1, alpha = 0.4, size = 1.5) +
+
+  labs(
+    title = "Microarray Spot Intensity Distribution by Region (Z-score)",
+    x = "Microarray Region",
+    y = "Z-score Normalized Intensity"
+  ) +
+
+  theme_bw(base_size = 14) +
+
+  theme(
+    legend.position = "none",
+    panel.grid = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
+    axis.title = element_text(face = "bold")
+  )

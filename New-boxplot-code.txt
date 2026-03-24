@@ -1,0 +1,72 @@
+# ==============================
+#   Protein Microarray Region-wise Boxplots
+#   (Z-score Normalized from Spot Intensities)
+# ==============================
+
+# --- Load Required Libraries ---
+if (!require("readr")) install.packages("readr")
+if (!require("dplyr")) install.packages("dplyr")
+if (!require("ggplot2")) install.packages("ggplot2")
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+# --- Step 1: Set working directory ---
+setwd("E:/Sem 7/Major Project")
+
+# --- Step 2: Read CSV File ---
+data <- read_csv("spot_intensity_output.csv")
+
+# --- Step 3: Check column names ---
+colnames(data)
+
+# Expected columns: Spot_ID, Mean_Intensity
+
+# --- Step 4: Create Regions (Group Spots) ---
+# Divide spots into smaller subsets representing microarray regions
+
+spots_per_region <- 20   # adjust if needed
+
+data <- data %>%
+  mutate(
+    Region = paste0("Region_",
+                    ceiling(Spot_ID / spots_per_region))
+  )
+
+# --- Step 5: Apply Z-score Normalization ---
+data <- data %>%
+  mutate(
+    Zscore = (Mean_Intensity - mean(Mean_Intensity, na.rm = TRUE)) /
+             sd(Mean_Intensity, na.rm = TRUE)
+  )
+
+# --- Step 6: Convert Region to Factor ---
+data$Region <- factor(data$Region,
+                      levels = unique(data$Region))
+
+# --- Step 7: Plot Region-wise Boxplots ---
+ggplot(data, aes(x = Region, y = Zscore, fill = Region)) +
+
+  geom_boxplot(
+    width = 0.6,
+    alpha = 0.9,
+    color = "black",
+    outlier.shape = 16
+  ) +
+
+  labs(
+    title = "Microarray Spot Intensity Distribution by Region (Z-score)",
+    x = "Microarray Region",
+    y = "Z-score Normalized Intensity"
+  ) +
+
+  theme_bw(base_size = 14) +
+
+  theme(
+    legend.position = "none",
+    panel.grid = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
+    axis.title = element_text(face = "bold")
+  )
