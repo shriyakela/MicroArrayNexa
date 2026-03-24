@@ -12,6 +12,7 @@
 - **Vidhi Parmar** - 60009220054
 
 ---
+## Demo Link : https://drive.google.com/file/d/1Xt-3JGEuyEnXHaS-UBVFtx448jTX_JBH/view?usp=drive_link
 
 ## 🎯 Problem Statement
 
@@ -99,38 +100,7 @@ There is a critical need for an automated, accurate, and scalable solution that 
 | **HTML5 & CSS3** | Web interface markup & styling |
 | **JavaScript** | Client-side interactivity |
 
-### Model & Data
-| Component | Description |
-|-----------|------------|
-| **Pre-trained Model** | unet_trained_state.pth |
-| **Training Data** | Annotated microarray images |
-| **Input Format** | PNG, JPEG (256×256 pixels) |
-| **Processing** | Single image at a time |
 
----
-
-## 📁 Project Structure
-
-```
-spotrixui/
-├── app.py                          # Flask application & main logic
-├── visualizations.py               # Visualization generation module
-├── requirements.txt                # Python dependencies
-├── unet_trained_state.pth          # Pre-trained U-Net model
-├── README.md                       # Project documentation
-├── static/
-│   ├── uploads/                    # User-uploaded images
-│   └── results/                    # Generated output images & plots
-├── templates/
-│   ├── index.html                  # Main analysis page
-│   └── visualizations.html         # Visualization display page
-└── notebooks/
-    ├── gaussian.ipynb              # Gaussian analysis notebook
-    ├── poisson.ipynb               # Poisson distribution notebook
-    └── speckle.ipynb               # Speckle analysis notebook
-```
-
----
 
 ## 🚀 Quick Start Guide
 
@@ -202,72 +172,8 @@ Results Display & Export
 (Statistics table, CSV download, visualization tabs)
 ```
 
-### File Processing Steps
 
-1. **Input**: User uploads microarray image
-2. **Preprocessing**: 
-   - Converts to grayscale
-   - Resizes to 256×256 pixels
-   - Normalizes pixel values (0-1 range)
-3. **Model Inference**: U-Net predicts spot locations
-4. **Segmentation**: Threshold prediction (>0.1) and label components
-5. **Analysis**: Calculate mean intensity for each spot
-6. **Visualization**: Generate 4 statistical plots
-7. **Output**: 
-   - Display results on web interface
-   - Make visualizations available in new tab
-   - Enable CSV export
 
----
-
-## 📈 Features in Detail
-
-### 1. Image Upload & Analysis
-- Accepts common image formats (PNG, JPEG, etc.)
-- Automatic preprocessing and optimization
-- Real-time processing feedback
-- Displays original and detected spots mask
-
-### 2. Statistical Results
-- Total number of spots detected
-- Mean intensity for each spot (top 50 displayed)
-- Sortable results table
-- CSV export for all spots
-
-### 3. Interactive Visualizations
-- **Density Plot**: Distribution analysis of intensities
-- **Box Plot**: Region-wise statistical distribution
-- **Heatmap**: Spatial intensity patterns
-- **Mean Intensity Chart**: Region comparison with error bars
-- Opens in separate browser tabs
-- High-resolution output (300 DPI)
-
-### 4. Data Export
-- CSV format with headers
-- Spot number and mean intensity columns
-- Compatible with Excel, R, Python
-- Enables downstream statistical analysis
-
----
-
-## 🧠 U-Net Architecture
-
-The U-Net model employed for spot detection:
-- **Input**: Single channel (grayscale) image, 256×256 pixels
-- **Encoder**: Convolutional blocks with max pooling (2 levels)
-- **Bottleneck**: Concentrated feature representation
-- **Decoder**: Transpose convolutions with skip connections
-- **Output**: Single channel probability map
-- **Activation**: Sigmoid for binary segmentation
-
-### Model Specifications
-```
-Input  →  Conv→Conv→Pool → Conv→Conv→Pool → Bottleneck
-                                ↓
-Better Representation ← UpConv←Concat←UpConv←Concat ← Output
-```
-
----
 
 ## 📝 Workflow Example
 
